@@ -1,7 +1,8 @@
 #include <Arduino.h>
-#include "input.h"
 
-char* keys_layout[6][8] = {
+#include "input_keypads.h"
+
+char *keys_layout[6][8] = {
     {"0", "1", "2", "3", "4", "5", "6", "7"},
     {"8", "9", "N/A", "N/A", "_", "?", "L", "P"},
     {"+", "W", "E", "R", "T", "U", "I", "O"},
@@ -12,6 +13,9 @@ char* keys_layout[6][8] = {
 void setup()
 {
   Serial.begin(9600);
+  delay(20);
+
+  Serial1.begin(9600);
   delay(20);
 
   pinMode(KEYPAD1_R1, INPUT_PULLUP);
@@ -35,21 +39,25 @@ void setup()
 
 void loop()
 {
+  uint8_t scan_out;
   for (int i = 0; i < 6; i++)
   {
-    int j;
-    // Serial.print(i);
-    // Serial.print(" -> Ox");
-    // Serial.println(read_port2(i),HEX);
-    j = read_key(i);
-    if (j != 1) {
+    scan_out = read_key(i);
+    Serial.print(i);
+    Serial.print(" -> Ox");
+    Serial.println(scan_out, HEX);
+    if (scan_out != 1)
+    {
       // Serial.print("i == ");
       // Serial.print(i);
       // Serial.print(", j == ");
       // Serial.print(j,HEX);
       // Serial.print(", key == ");
-      Serial.println(keys_layout[i][j>>1]);
+      Serial.println(keys_layout[i][scan_out >> 1]);
     }
   }
-  delay(100);
+  Serial1.println("Toto");
+  Serial1.write(scan_out);
+  
+  delay(1000);
 }

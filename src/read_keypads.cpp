@@ -23,43 +23,33 @@ void setup()
 void loop()
 {
 
-  int scan_in;
-  int scan_out;
+  uint8_t scan_in;
+  uint8_t scan_out;
   scan_in =
       digitalRead(input_b2) * 4 +
       digitalRead(input_b1) * 2 +
       digitalRead(input_b0);
 
-  Serial.print("Périphérique *** scan_in == ");
-  Serial.println(scan_in);
-
-  if (scan_in >= 0)
-  {
-    scan_out = read_key((uint8_t)scan_in);
-    if (!(scan_out & 0x10))
-    {
-      Serial.print(", scan_out == ");
-      Serial.print(scan_out, HEX);
-      Serial.print(", key == ");
-      Serial.println(keys_layout[scan_in][(scan_out & 0xE0) >> 5]);
 #ifdef DEBUG
+  Serial.println();
+  Serial.print("Périphérique *** scan_in == ");
+  Serial.print(scan_in);
 #endif
-      pinMode(input_b2, OUTPUT);
-      pinMode(input_b1, OUTPUT);
-      pinMode(input_b0, OUTPUT);
 
-      digitalWrite(output_b7, scan_out & 0x80);
-      digitalWrite(output_b6, scan_out & 0x40);
-      digitalWrite(output_b5, scan_out & 0x20);
-      digitalWrite(output_b4, scan_out & 0x10);
-
-      digitalWrite(input_b2, scan_out & 0x04);
-      digitalWrite(input_b1, scan_out & 0x02);
-      digitalWrite(input_b0, scan_out & 0x01);
-
-      pinMode(input_b2, INPUT);
-      pinMode(input_b1, INPUT);
-      pinMode(input_b0, INPUT);
-    }
+  scan_out = read_key(scan_in);
+  if (!(scan_out & 0x10))
+  {
+#ifdef DEBUG
+    Serial.print(", scan_out == ");
+    Serial.print(scan_out, HEX);
+    Serial.print(", key == ");
+    Serial.print(keys_layout[scan_in][(scan_out & 0xE0) >> 5]);
+#endif
   }
+    digitalWrite(output_b7, scan_out & 0x80);
+    digitalWrite(output_b6, scan_out & 0x40);
+    digitalWrite(output_b5, scan_out & 0x20);
+    digitalWrite(output_b4, scan_out & 0x10);
+
+  delayMicroseconds(100);
 }

@@ -20,25 +20,24 @@
 #define KEYPAD2_C2 7
 #define KEYPAD2_C3 8
 
-#define INPUT_B0 13
-#define INPUT_B1 14
-#define INPUT_B2 A1
-
+#define OUTPUT_B0 13
+#define OUTPUT_B1 14
+#define OUTPUT_B2 A1
 #define OUTPUT_B4 12
 #define OUTPUT_B5 11
 #define OUTPUT_B6 10
 #define OUTPUT_B7 9
 
+extern int output_b0;
+extern int output_b1;
+extern int output_b2;
 extern int output_b4;
 extern int output_b5;
 extern int output_b6;
 extern int output_b7;
 
-extern int input_b0;
-extern int input_b1;
-extern int input_b2;
 
 void init_pins(void);
-uint8_t read_key(uint8_t scan_in);
+uint8_t read_key(void);
 
 #endif /* INPUT_H */

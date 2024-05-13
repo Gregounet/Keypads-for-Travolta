@@ -23,33 +23,25 @@ void setup()
 void loop()
 {
 
-  uint8_t scan_in;
   uint8_t scan_out;
-  scan_in =
-      digitalRead(input_b2) * 4 +
-      digitalRead(input_b1) * 2 +
-      digitalRead(input_b0);
 
+  scan_out = read_key();
 #ifdef DEBUG
-  Serial.println();
-  Serial.print("Périphérique *** scan_in == ");
-  Serial.print(scan_in);
-#endif
-
-  scan_out = read_key(scan_in);
   if (!(scan_out & 0x10))
   {
-#ifdef DEBUG
     Serial.print(", scan_out == ");
     Serial.print(scan_out, HEX);
     Serial.print(", key == ");
     Serial.print(keys_layout[scan_in][(scan_out & 0xE0) >> 5]);
-#endif
   }
+#endif
     digitalWrite(output_b7, scan_out & 0x80);
     digitalWrite(output_b6, scan_out & 0x40);
     digitalWrite(output_b5, scan_out & 0x20);
     digitalWrite(output_b4, scan_out & 0x10);
+    digitalWrite(output_b2, scan_out & 0x04);
+    digitalWrite(output_b1, scan_out & 0x02);
+    digitalWrite(output_b0, scan_out & 0x01);
 
   delayMicroseconds(100);
 }
